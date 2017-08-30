@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>BFCCPS Lunch Receipt Conversion</title>
+
+</head>
+
+<body>
+<script>
+function convertToCsv() {
+   var return_value = "Subject,Start Date, Start Time, End Date, End Time, All Day Event, Description, Location, Private";
+   var input_value_raw = document.forms['conversion']['receipt'].value;
+   var input_value = input_value_raw.split('\n');
+   var namefound = false;
+   var name = '';
+   
+   for ( var i = 0, len = input_value.length; i < len; i++ )   {
+        var row = input_value[i];
+        if ( ! namefound ) {
+           namefound = true;
+           name = row.split(',')[1];
+        }
+        else {
+            if ( row.indexOf( 'Subtotal' ) > 0 ) {
+                namefound = false;
+            }
+            else {
+                if (row.indexOf('-') > 0 ) {
+                    var data = row.split('\t');
+                    var date_val = data[0];
+                    if ( data[2].length > 5 ) {
+                        var nline = name + " Hot Lunch," + date_val + ",," + date_val + ",True," + data[2] + ",BFCCPS,False";
+                        return_value = return_value + "\n" + nline;
+                    }
+                }
+            }
+       }
+        
+    }
+    document.forms['conversion']['csv_data'].value = return_value
+}
+
+function downloadCSV() {
+    var textToWrite = document.forms['conversion']['csv_data'].value;
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    var fileNameToSaveAs = 'lunch_orders.csv';
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+}
+</script>
+<h1>BFCCPS Lunch Receipt Conversion</h1>
+
+Instructions
+<table width=900><tr><td>
+<ol><li>Open the BFCCPS lunch order system and click on the receipt of
+  order you want to use</li>
+  <li>Highlight the receipt starting with the first child's name,
+  ending with the word Subtotal</li>
+  <li>Copy the highlighted text (control-C)<br><img
+  src="sample_order.png" width=500 height=500></li>
+  <li>Paste in to the copied text area below</li>
+  <li>Click on Convert to CSV</li>
+  <li>Click on Download as CSV to download it with the name
+  "lunch_orders.csv" to your standard download location. <br>Alternately,
+  copy everything in the Result text box and paste it into your
+  favorite text browser and save as a csv.</li>
+  <li>Open up <a href="http://calendar.google.com/ ">http://calendar.google.com/</a></li>
+  <li>Go to settings (sprocket in upper right), click on Calendars
+  link</li>
+  <li>Click on "Import Calendar" halfway down the page</li>
+  <li>Choose the file that was just downloaded</li>
+  <li>Click import</li>
+  <li>Your google calendar has all of the
+  lunches</li></ol></td></tr></table>
+  <p><p>
+<form name="conversion">
+<table><tr><td>Copied Text</td><td></td><td>Result</td></tr>
+<tr><td>
+<textarea name="receipt" style="height:400px;width:600px"
+border=1></textarea></td>
+<td><input type="button" value="Convert to CSV" onclick="convertToCsv()">
+    <p>
+    <input type="button" value="Download as CSV" onclick="downloadCSV()"></td>
+<td><textarea name="csv_data" style="height:400px;width:600px"
+  border=1></textarea></td></tr></table>
+</form>
+
+<hr></body>
+  </html>
