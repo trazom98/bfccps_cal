@@ -26,6 +26,7 @@ function convertToCsv() {
             else {
                 if (row.indexOf('-') > 0 ) {
                     var data = row.split('\t');
+                    alert( data );
                     var date_val = data[0];
                     if ( data[2].length > 5 ) {
                         var nline = name + " Hot Lunch," + date_val + ",," + date_val + ",True," + data[2] + ",BFCCPS,False";
