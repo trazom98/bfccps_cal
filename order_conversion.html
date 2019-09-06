@@ -15,6 +15,7 @@ function convertToCsv() {
    var date = '';
    var desc = '';
    var subj = '';
+   var finished = false;
    var days_of_week = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
    
    for ( var i = 0, len = input_value.length; i < len; i++ )   {
@@ -38,8 +39,11 @@ function convertToCsv() {
             }
             else {
                 if ( row == "" || row.indexOf( "Amount" ) > 0 ) {
+                    if ( !finished ) {
                     var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
+                    finished = true;
+                    }
                 }
                 else {
                    if ( words[0] == "-" ) {
