@@ -29,7 +29,7 @@ function convertToCsv() {
             var words = row.split(' ');
             if ( days_of_week.includes( words[0])) {
                 if ( desc != '' ) {
-                    var nline = subj + "," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+                    var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                 }
                 desc = "";
@@ -38,7 +38,7 @@ function convertToCsv() {
             }
             else {
                 if ( row == "" ) {
-                    var nline = subj + "," + date + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+                    var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                 }
                 else {
