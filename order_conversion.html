@@ -44,6 +44,10 @@ function convertToCsv() {
                 else {
                    if ( words[0] == "-" ) {
                       if ( words[1] == "Lunch" || words[1] == "Breakfast" ) {
+                          if( desc != "" ) {
+                              var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
+                              return_value = return_value + "\n" + nline;
+                          }
                           subj = child + ": " + words[1];
                           desc = words.slice( 3, -1 ).toString();
                       }
