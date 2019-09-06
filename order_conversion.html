@@ -43,7 +43,7 @@ function convertToCsv() {
                 }
                 else {
                    if ( words[0] == "-" ) {
-                      if ( words[1] == "Lunch" or words[1] == "Breakfast" ) {
+                      if ( words[1] == "Lunch" || words[1] == "Breakfast" ) {
                           subj = child + ": " + words[1];
                           desc = words.slice( 3, -1 ).toString();
                       }
