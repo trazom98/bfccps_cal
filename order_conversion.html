@@ -49,7 +49,7 @@ function convertToCsv() {
                               return_value = return_value + "\n" + nline;
                           }
                           subj = child + ": " + words[1];
-                          desc = words.slice( 3, -1 ).toString();
+                          desc = words.slice( 3, -1 ).join(" ");
                       }
                       else {
                          if ( row.indexOf( "Lunch" ) >= 0 ) {
