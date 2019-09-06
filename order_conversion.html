@@ -37,7 +37,7 @@ function convertToCsv() {
                 date = words[1];
             }
             else {
-                if ( row == "" ) {
+                if ( row == "" || row.indexOf( "Amount" ) > 0 {
                     var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                 }
@@ -49,15 +49,10 @@ function convertToCsv() {
                       }
                       else {
                          if ( row.indexOf( "Lunch" ) >= 0 ) {
-                             subj = child + ": Lunch Only";
+                             subj = child + ": Milk Only";
                              desc = words[7];
                          }
                       }
-  //              var data = row.split('\t');
-  //              var date_val = data[0];
-   //             if ( data[2].length > 5 ) {
-  //                  var nline = name + " Hot Lunch," + date + ",," + date + ",,True," + data[2] + ",BFCCPS,False";
-  //                  return_value = return_value + "\n" + nline;
                   }
                 }
             }
