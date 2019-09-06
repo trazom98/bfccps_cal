@@ -38,7 +38,7 @@ function convertToCsv() {
             }
             else {
                 if ( row == "" ) {
-                    var nline = subj + "," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+                    var nline = subj + "," + date + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                 }
                 else {
@@ -56,7 +56,7 @@ function convertToCsv() {
   //              var data = row.split('\t');
   //              var date_val = data[0];
    //             if ( data[2].length > 5 ) {
-  //                  var nline = name + " Hot Lunch," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+  //                  var nline = name + " Hot Lunch," + date + ",," + date + ",,True," + data[2] + ",BFCCPS,False";
   //                  return_value = return_value + "\n" + nline;
                   }
                 }
