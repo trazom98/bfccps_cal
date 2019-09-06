@@ -11,26 +11,54 @@ function convertToCsv() {
    var input_value_raw = document.forms['conversion']['receipt'].value;
    var input_value = input_value_raw.split('\n');
    var namefound = false;
-   var name = '';
+   var child = '';
+   var date = '';
+   var desc = '';
+   var subj = '';
+   var days_of_week = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
    
    for ( var i = 0, len = input_value.length; i < len; i++ )   {
         var row = input_value[i];
         if ( ! namefound ) {
-           namefound = true;
-           name = row.split(',')[1];
+           if (row.indexOf('registered') >= 0) {
+               namefound = true;
+               child = row.split(' ')[3];
+           }
         }
         else {
-            if ( row.indexOf( 'Subtotal' ) > 0 ) {
-                namefound = false;
+            var words = row.split(' ');
+            if ( days_of_week.includes( words[0])) {
+                if ( desc != '' ) {
+                    var nline = subj + "," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+                    return_value = return_value + "\n" + nline;
+                }
+                desc = "";
+                subj = "";
+                date = words[1];
             }
             else {
-                if (row.indexOf('-') > 0 ) {
-                    var data = row.split('\t');
-                    var date_val = data[0];
-                    if ( data[2].length > 5 ) {
-                        var nline = name + " Hot Lunch," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
-                        return_value = return_value + "\n" + nline;
-                    }
+                if ( row == "" ) {
+                    var nline = subj + "," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+                    return_value = return_value + "\n" + nline;
+                }
+                else {
+                   if ( words[0] == "-" ) {
+                      if ( words[1] == "Lunch" or words[1] == "Breakfast" ) {
+                          subj = child + ": " + words[1];
+                          desc = words.slice( 3, -1 ).toString();
+                      }
+                      else {
+                         if ( row.indexOf( "Lunch" ) >= 0 ) {
+                             subj = child + ": Lunch Only";
+                             desc = words[7];
+                         }
+                      }
+  //              var data = row.split('\t');
+  //              var date_val = data[0];
+   //             if ( data[2].length > 5 ) {
+  //                  var nline = name + " Hot Lunch," + date_val + ",," + date_val + ",,True," + data[2] + ",BFCCPS,False";
+  //                  return_value = return_value + "\n" + nline;
+                  }
                 }
             }
        }
