@@ -6,6 +6,21 @@
 
 <body>
 <script>
+function collapseExpand(e) {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    //alert(content.style.display + 1);
+    if (content.style.display === "block" || content.style.display == "") {
+      content.style.display = "none";
+    //alert(content.style.display + 2);
+    } else {
+      content.style.display = "block";
+    //alert(content.style.display + 3);
+    }
+    //alert(content.style.display + 4);
+    return false;
+  }
+
 function convertToCsv() {
    var return_value = "Subject,Start Date, Start Time, End Date, End Time, All Day Event, Description, Location, Private";
    var input_value_raw = document.forms['conversion']['receipt'].value;
@@ -16,6 +31,11 @@ function convertToCsv() {
    var desc = '';
    var subj = '';
    var finished = false;
+   var allday = true;
+   var timeofday = document.forms['conversion']['timetouse'].value;
+   if ( timeofday != "" ) {
+      allday = false; 
+   }
    var days_of_week = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
    
    for ( var i = 0, len = input_value.length; i < len; i++ )   {
@@ -30,7 +50,7 @@ function convertToCsv() {
             var words = row.split(' ');
             if ( days_of_week.includes( words[0])) {
                 if ( desc != '' ) {
-                    var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
+                    var nline = subj + "," + date + ","+timeofday+"," + date + ","+timeofday+","+allday+"," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                 }
                 desc = "";
@@ -40,7 +60,7 @@ function convertToCsv() {
             else {
                 if ( row == "" || row.indexOf( "Amount" ) > 0 ) {
                     if ( !finished ) {
-                    var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
+                    var nline = subj + "," + date + ","+timeofday+"," + date + ","+timeofday+","+allday+"," + desc + ",BFCCPS,False";
                     return_value = return_value + "\n" + nline;
                     finished = true;
                     }
@@ -49,7 +69,7 @@ function convertToCsv() {
                    if ( words[0] == "-" ) {
                       if ( words[1] == "Lunch" || words[1] == "Breakfast" ) {
                           if( desc != "" ) {
-                              var nline = subj + "," + date + ",," + date + ",,True," + desc + ",BFCCPS,False";
+                              var nline = subj + "," + date + ","+timeofday+"," + date + ","+timeofday+","+allday+"," + desc + ",BFCCPS,False";
                               return_value = return_value + "\n" + nline;
                           }
                           subj = child + ": " + words[1];
@@ -73,7 +93,7 @@ function convertToCsv() {
 function downloadCSV() {
     var textToWrite = document.forms['conversion']['csv_data'].value;
     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
-    var fileNameToSaveAs = 'lunch_orders.csv';
+    var fileNameToSaveAs = document.forms['conversion']['downloadname'].value;
 
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
@@ -96,20 +116,59 @@ function downloadCSV() {
 
     downloadLink.click();
 }
-</script>
-<h1>BFCCPS Lunch Receipt Conversion - to CSV for import into Google Calendar</h1>
 
-<h3>Instructions</h3>
+</script>
+<h1 color="#000080">BFCCPS Lunch Receipt Conversion - to CSV for import into Google Calendar</h1>
+
+
+<form name="conversion" onSubmit="return false;">
+<button class="collapsible">Advanced Options</button>
+<div class="instructions">
+Note: these capabilities are less well tested & may not quite work.
+
+<table><tr>
+<td width=400>File name to download as: </td><td><input type="text" name="downloadname" value="lunch_orders.csv"></td>
+<tr>
+<td>Time to use:</td><td> <select name="timetouse">
+                 <option value="" selected>All Day</option>
+                 <option value="6:00 am">6am</option>
+                 <option value="6:30 am" >6:30am</option>
+                 <option value="7:00 am" >7am</option>
+                 <option value="7:30 am" >7:30am</option>
+                 <option value="8:00 am" >8am</option>
+                 <option value="8:30 am" >8:30am</option>
+                 <option value="9:00 am" >9am</option>
+                 <option value="12:00 pm" >Noon</option>
+             </select></td></tr></table>
+<p>
+<hr>
+<p>
+</div>
+<p>
+<p>
+<table><tr><td>Copied Text</td>
+           <td><input type="button" value="Convert & Download as CSV" onclick="convertToCsv();downloadCSV()"</td>
+           <td>Result</td></tr>
+<tr><td colspan=2>
+    <textarea name="receipt" style="height:250px;width:400px" border=1></textarea></td>
+   <!--td><input type="button" value="Convert to CSV" onclick="convertToCsv()">
+    <p>
+    <input type="button" value="Download as CSV" onclick="downloadCSV()">
+</td-->
+<td><textarea name="csv_data" style="height:250px;width:100px"
+  border=1></textarea></td></tr></table>
+<hr>
+<button class="collapsible">Instructions (click)</button>
+<div class="instructions">
 <table width=900><tr><td>
 <ol><li>Open your email and click on the receipt of
   order you want to use</li>
   <li>Highlight the text of the receipt from at least the line<br><b><i>
      You have registered Jane Doe for:</i></b> <br> and to the line with the <br><b><i>Total Amount: $XX.YY</b></i><br><img
-  src="bfccps_famid.png" width=500 height=500></li>
-  <li>Copy the highlighted text (control-C)</li>
+  src="bfccps_famid.png" width=500 height=500 border=2></li></ol></td><td>
+  <ol start=3><li>Copy the highlighted text (control-C)</li>
   <li>Paste in to the copied text area below</li>
-  <li>Click on Convert to CSV</li>
-  <li>Click on Download as CSV to download it with the name
+  <li>Click on Convert & Download as CSV to download it with the name
   "lunch_orders.csv" to your standard download location. <br>Alternately,
   copy everything in the Result text box and paste it into your
   favorite text editor and save as a csv.</li>
@@ -121,19 +180,21 @@ function downloadCSV() {
   <li>Click import</li>
   <li>Your google calendar has all of the
   lunches</li></ol></td></tr></table>
-  <p><p>
-<form name="conversion">
-<table><tr><td>Copied Text</td><td></td><td>Result</td></tr>
-<tr><td>
-<textarea name="receipt" style="height:400px;width:600px"
-border=1></textarea></td>
-<td><input type="button" value="Convert to CSV" onclick="convertToCsv()">
-    <p>
-    <input type="button" value="Download as CSV" onclick="downloadCSV()"></td>
-<td><textarea name="csv_data" style="height:400px;width:600px"
-  border=1></textarea></td></tr></table>
-</form>
-
 <hr>
+  </div>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", collapseExpand, false); 
+  coll[i].nextElementSibling.style.display = "none";
+}
+
+
+
+
+</script>
+</form>
    For limited help, contact <a href="mailto:ccourtright@gmail.com">Celia</a>.</body>
   </html>

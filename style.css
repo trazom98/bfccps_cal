@@ -1,5 +1,6 @@
 /* css Zen Garden default style v1.02 */
 /* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
+q
 
 /* This file based on 'Tranquille' by Dave Shea */
 /* You may use this file as a foundation for any new work, but you may find it easier to start from scratch. */
@@ -16,11 +17,15 @@ html {
 body { 
 	font: 75% georgia, sans-serif;
 	line-height: 1.88889;
-	color: #555753; 
+	color: #000080;
 	background: #fff url(http://csszengarden.com/001/blossoms.jpg) no-repeat bottom right; 
 	margin: 0; 
 	padding: 0;
 	}
+button {
+        background: #888eb5;
+}
+
 p { 
 	margin-top: 0; 
 	text-align: justify;
@@ -29,7 +34,7 @@ h3 {
 	font: italic normal 1.4em georgia, sans-serif;
 	letter-spacing: 1px; 
 	margin-bottom: 0; 
-	color: #7D775C;
+	color: #111e6c;
 	}
 a:link { 
 	font-weight: bold; 
@@ -51,6 +56,28 @@ abbr {
 
 
 /* specific divs */
+.collapsible {
+  background-color: #111e6c;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 10px;
+}
+
+.active, .collapsible:hover {
+  background-color: #000080;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
 .page-wrapper { 
 	background: url(http://csszengarden.com/001/zen-bg.jpg) no-repeat top left; 
 	padding: 0 175px 0 110px;  
@@ -70,6 +97,7 @@ header h1 {
 	width: 219px;
 	height: 87px;
 	float: left;
+        color: red;
 
 	text-indent: 100%;
 	white-space: nowrap;
